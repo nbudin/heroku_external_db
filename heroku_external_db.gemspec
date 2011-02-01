@@ -28,6 +28,10 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "generators/install/USAGE",
+    "generators/install/heroku_external_db_generator.rb",
+    "generators/install/templates/initializer.rb",
+    "heroku_external_db.gemspec",
     "lib/heroku_external_db.rb",
     "spec/heroku_external_db_spec.rb",
     "spec/spec_helper.rb"
@@ -35,7 +39,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/nbudin/heroku_external_db}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.4.2}
+  s.rubygems_version = %q{1.5.0}
   s.summary = %q{Makes it easy to connect Heroku apps to external databases}
   s.test_files = [
     "spec/heroku_external_db_spec.rb",
