@@ -1,9 +1,8 @@
 if defined?(Rails::Generators::Base)
   module HerokuExternalDb
     class Generator < Rails::Generators::Base
-        def create_initializer_file
-          copy_file "initializer.rb", "config/initializers/heroku_external_db.rb"
-        end
+      def create_initializer_file
+        copy_file "initializer.rb", "config/initializers/heroku_external_db.rb"
       end
     end
   end
