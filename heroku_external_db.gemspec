@@ -28,11 +28,12 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "generators/install/USAGE",
-    "generators/install/heroku_external_db_generator.rb",
-    "generators/install/templates/initializer.rb",
     "heroku_external_db.gemspec",
+    "lib/generators/install/USAGE",
+    "lib/generators/install/install_generator.rb",
+    "lib/generators/install/templates/initializer.rb",
     "lib/heroku_external_db.rb",
+    "rails/init.rb",
     "spec/heroku_external_db_spec.rb",
     "spec/spec_helper.rb"
   ]
