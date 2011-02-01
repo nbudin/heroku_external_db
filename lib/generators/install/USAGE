@@ -1,0 +1,8 @@
+Description:
+    Set up a default initializer for heroku_external_db in a Rails application.
+
+Example:
+    rails generate heroku_external_db:install
+
+    This will create:
+      config/initializers/heroku_external_db.rb
