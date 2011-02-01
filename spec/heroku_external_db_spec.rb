@@ -18,9 +18,9 @@ def setup_ca_cert(extdb)
   return @cert_path, @cert_filename
 end
 
-describe HerokuExternalDb do
+describe HerokuExternalDb::Configuration do
   before do
-    @extdb = HerokuExternalDb.new("GREEN", "red")
+    @extdb = HerokuExternalDb::Configuration.new("GREEN", "red")
   end
 
   it "initializes based on env_prefix and configuration_name" do
@@ -170,7 +170,7 @@ describe HerokuExternalDb do
     describe ".setup_configuration!" do
       it "should return a new instance" do
         @new_extdb = HerokuExternalDb.setup_configuration!("GREEN", "red")
-        @new_extdb.should be_instance_of(HerokuExternalDb)
+        @new_extdb.should be_instance_of(HerokuExternalDb::Configuration)
         @new_extdb.should_not equal(@extdb)
       end
     end
@@ -202,7 +202,7 @@ describe HerokuExternalDb do
       
       it "should return a new instance based on RAILS_ENV" do
         @new_extdb = HerokuExternalDb.setup_rails_env!
-        @new_extdb.should be_instance_of(HerokuExternalDb)
+        @new_extdb.should be_instance_of(HerokuExternalDb::Configuration)
         @new_extdb.should_not equal(@extdb)
       end
       
