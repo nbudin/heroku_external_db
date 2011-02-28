@@ -15,7 +15,7 @@ Add the following to your Gemfile:
 Then run:
   
   bundle install
-  rails generate heroku_external_db:install  # or script/generate if you're on Rails 2
+  rails generate heroku_external_db  # or script/generate if you're on Rails 2
 
 This will set up a default initializer in your app's config/initializers/heroku_external_db.rb.  This makes the assumption that you're happy with using EXTERNAL_DATABASE_URL and (optionally) EXTERNAL_DATABASE_CA as your environment variables and that you want to use the external database as your main production DB.  If that's not true, please edit the initializer as needed.
 
