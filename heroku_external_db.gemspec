@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{heroku_external_db}
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nat Budin"]
-  s.date = %q{2011-02-01}
+  s.date = %q{2011-07-06}
   s.description = %q{  heroku_external_db lets you specify multiple databases using Heroku-style DATABASE_URL parameters, wire
   them up to different ActiveRecord configurations, and automatically configure it from the Rails
   environment.  It also adds support for the :sslca configuration parameter so you can talk to external
@@ -28,11 +28,11 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "generators/heroku_external_db/USAGE",
-    "generators/heroku_external_db/heroku_external_db_generator.rb",
-    "generators/heroku_external_db/templates/initializer.rb",
     "heroku_external_db.gemspec",
     "init.rb",
+    "lib/generators/heroku_external_db/USAGE",
+    "lib/generators/heroku_external_db/heroku_external_db_generator.rb",
+    "lib/generators/heroku_external_db/templates/initializer.rb",
     "lib/heroku_external_db.rb",
     "rails/init.rb",
     "spec/heroku_external_db_spec.rb",
@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/nbudin/heroku_external_db}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.5.0}
+  s.rubygems_version = %q{1.6.2}
   s.summary = %q{Makes it easy to connect Heroku apps to external databases}
   s.test_files = [
     "spec/heroku_external_db_spec.rb",
