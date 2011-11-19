@@ -6,18 +6,24 @@ Allows you to easily set up one or more external databases in Rails applications
 * You want to share a database between applications and aren't on the Heroku dedicated database plan.
 * You want to host your application database somewhere besides Heroku, and run the app using Heroku dynos.
 
-== Usage
+== Installation
 
 Add the following to your Gemfile:
 
   gem 'heroku_external_db'
+  # Or with the version number (easily found at https://rubygems.org/gems/heroku_external_db)
+  gem 'heroku_external_db', '~> x.y.z'
   
 Then run:
   
   bundle install
   rails generate heroku_external_db:generator
 
-This will set up a default initializer in your app's config/initializers/heroku_external_db.rb.  This makes the assumption that you're happy with using EXTERNAL_DATABASE_URL and (optionally) EXTERNAL_DATABASE_CA as your environment variables and that you want to use the external database as your main production DB.  If that's not true, please edit the initializer as needed.
+This will set up a default initializer in your app's config/initializers/heroku_external_db.rb.
+
+== Tutorial
+
+The generator makes the assumption that you're happy with using EXTERNAL_DATABASE_URL and (optionally) EXTERNAL_DATABASE_CA as your environment variables and that you want to use the external database as your main production DB.  If that's not true, please edit the initializer as needed.
 
 == Contributing to heroku_external_db
  
