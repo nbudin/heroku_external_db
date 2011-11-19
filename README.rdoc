@@ -31,6 +31,4 @@ This will set up a default initializer in your app's config/initializers/heroku_
 
 == Copyright
 
-Copyright (c) 2011 Nat Budin. See LICENSE.txt for
-further details.
-
+Copyright (c) 2011 Nat Budin. See LICENSE.txt for further details.
