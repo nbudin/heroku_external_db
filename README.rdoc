@@ -98,7 +98,7 @@ With all these changes committed, we can deploy to our Heroku app:
 
 Now, since we are connecting to an existing database, we don't need to run any migrations.  (Keep in mind that when sharing a database, it is best to have one authoritative source for migrations to live.)  If in your situation you're creating a new database, you may need to do that, run migrations, seed the database, etc at this point.
 
-Open http://our-app.heroku.com and we should see our data.  If you are not in your situation, please check the logs first:
+Open http://our-app.heroku.com and we should see our data.  If you happen to run into a problem, please check the logs first:
 
   heroku logs --tail # Again, you may need to specify an app
 
