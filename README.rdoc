@@ -104,7 +104,30 @@ Open http://our-app.heroku.com and we should see our data.  If you happen to run
 
 If you are having a problem, a good starting point is double checking your passwords, usernames, security settings, etc.
 
-Please note that X.509 is not currently supported and may be the reason for an "access denied" type of problem (if you require 2 certificates and 1 key, you're probably using X.509).  X.509 support is planned for an upcoming release.  (A proof of concept has already been completed.)
+=== Example: MySQL with X.509
+
+The process is very much the same as the above example, except two extra environment variables and files are required.  Below are the extra steps.
+
+What we have:
+
+* A CA certificate called +ca-cert.pem+
+* A client certificate called +client-cert.pem+
+* A client key called +client-key.pem+
+
+First, we configure Heroku with the appropriate environment variables:
+
+  heroku config:add EXTERNAL_DATABASE_CA='ca-cert.pem'
+  heroku config:add EXTERNAL_DATABASE_CERT='client-cert.pem'
+  heroku config:add EXTERNAL_DATABASE_KEY='client-key.pem'
+
+By default, +heroku_external_db+ looks for the files in +config/ca+, so we need to commit them:
+
+  mkdir -p config/ca
+  cp path/to/ca-cert.pem path/to/client-cert.pem path/to/client-key.pem config/ca
+  git add config/ca
+  git commit
+
+The rest of the process is the same as in "MySQL with a CA Certificate".
 
 == Contributing to heroku_external_db
  
@@ -115,6 +138,11 @@ Please note that X.509 is not currently supported and may be the reason for an "
 * Commit and push until you are happy with your contribution
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+
+=== Setting up Environment and Running Specs
+
+  ./configure
+  rake
 
 == Copyright
 

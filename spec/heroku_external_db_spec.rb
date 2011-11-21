@@ -74,24 +74,59 @@ describe HerokuExternalDb::Configuration do
     end
   end
   
-  describe "#db_ca_configuration" do
+  describe "#db_configuration" do
+    # Help make a "mock" certificate file
+    def mock_cert(name)
+      path = Tempfile.new(name).path
+      ca_path, cert_filename = File.split(path)
+      return path, cert_filename
+    end
+
     context "with a CA path" do
       before do
         @cert_path, @cert_filename = setup_ca_cert(@extdb)
       end
       
       it "should return an empty hash if not given a filename" do
-        @extdb.db_ca_configuration(nil).should == {}
+        @extdb.db_configuration(nil).should == {}
       end
     
       it "should have the correct pathname to the CA cert" do
-        @config = @extdb.db_ca_configuration(@cert_filename)
+        @config = @extdb.db_configuration(:sslca => @cert_filename)
         @config[:sslca].should == @cert_path
+      end
+
+      context 'when using X.509' do
+        it "should have the correct pathname to the client cert" do
+          @config = @extdb.db_configuration(:sslcert => @cert_filename)
+          @config[:sslcert].should == @cert_path
+        end
+
+        it "should have the correct pathname to the client key" do
+          @config = @extdb.db_configuration(:sslkey => @cert_filename)
+          @config[:sslkey].should == @cert_path
+        end
+
+        it 'should support setting all 3 X.509 certs' do
+          ca_cert_path, ca_cert_filename = mock_cert("ca-cert.pem")
+          client_cert_path, client_cert_filename = mock_cert("client-cert.pem")
+          client_key_path, client_key_filename = mock_cert("client-key.pem")
+
+          @config = @extdb.db_configuration({
+            :sslca => ca_cert_filename,
+            :sslcert => client_cert_filename,
+            :sslkey => client_key_filename,
+          })
+
+          @config[:sslca].should == ca_cert_path
+          @config[:sslcert].should == client_cert_path
+          @config[:sslkey].should == client_key_path
+        end
       end
     
       it "should throw an error if the file doesn't exist" do
         File.delete(@cert_path)
-        lambda { @extdb.db_ca_configuration(@cert_filename) }.should raise_error
+        lambda { @extdb.db_configuration(:sslca => @cert_filename) }.should raise_error
       end
     
       after do
@@ -101,11 +136,11 @@ describe HerokuExternalDb::Configuration do
     
     context "without a CA path" do
       it "should return an empty hash if not given a filename" do
-        @extdb.db_ca_configuration(nil).should == {}
+        @extdb.db_configuration(nil).should == {}
       end
       
       it "should raise an error if given a filename" do
-        lambda { @extdb.db_ca_configuration("filename") }.should raise_error
+        lambda { @extdb.db_configuration(:sslca => "filename") }.should raise_error
       end
     end
   end
