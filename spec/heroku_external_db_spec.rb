@@ -105,7 +105,7 @@ describe HerokuExternalDb::Configuration do
       end
       
       it "should raise an error if given a filename" do
-        lambda { @extdb.db_configuration("filename") }.should raise_error
+        lambda { @extdb.db_configuration(:sslca => "filename") }.should raise_error
       end
     end
   end
