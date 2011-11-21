@@ -34,7 +34,7 @@ In this example, we are setting up a connection to an external MySQL server usin
 What we have:
 
 * A CA certificate called +ca-cert.pem+
-* A database is available at +mysql://username:password@server/dbname+ (where +username+, +password+, +server+, and +dbname+ are the appropriate values for our server)
+* A database is available at mysql://username:password@server/dbname (where +username+, +password+, +server+, and +dbname+ are the appropriate values for our server)
 * Other security, e.g. firewalls.  Please make sure to open the appropriate ports and grant the necessary access for your database to be available externally.  Further discussion is outside the scope of this document, but for accessing EC2, you might start at http://devcenter.heroku.com/articles/external-services.
 
 First, we configure Heroku with the appropriate environment variables:
