@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nat Budin"]
-  s.date = %q{2011-07-06}
+  s.date = %q{2011-11-21}
   s.description = %q{  heroku_external_db lets you specify multiple databases using Heroku-style DATABASE_URL parameters, wire
   them up to different ActiveRecord configurations, and automatically configure it from the Rails
   environment.  It also adds support for the :sslca configuration parameter so you can talk to external
