@@ -75,6 +75,13 @@ describe HerokuExternalDb::Configuration do
   end
   
   describe "#db_configuration" do
+    # Help make a "mock" certificate file
+    def mock_cert(name)
+      path = Tempfile.new(name).path
+      ca_path, cert_filename = File.split(path)
+      return path, cert_filename
+    end
+
     context "with a CA path" do
       before do
         @cert_path, @cert_filename = setup_ca_cert(@extdb)
@@ -101,16 +108,19 @@ describe HerokuExternalDb::Configuration do
         end
 
         it 'should support setting all 3 X.509 certs' do
+          ca_cert_path, ca_cert_filename = mock_cert("ca-cert.pem")
+          client_cert_path, client_cert_filename = mock_cert("client-cert.pem")
+          client_key_path, client_key_filename = mock_cert("client-key.pem")
+
           @config = @extdb.db_configuration({
-            :sslca => @cert_filename,
-            :sslcert => @cert_filename,
-            :sslkey => @cert_filename,
+            :sslca => ca_cert_filename,
+            :sslcert => client_cert_filename,
+            :sslkey => client_key_filename,
           })
 
-          # TODO check for distinct values
-          @config[:sslca].should == @cert_path
-          @config[:sslcert].should == @cert_path
-          @config[:sslkey].should == @cert_path
+          @config[:sslca].should == ca_cert_path
+          @config[:sslcert].should == client_cert_path
+          @config[:sslkey].should == client_key_path
         end
       end
     
