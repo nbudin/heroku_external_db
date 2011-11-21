@@ -35,7 +35,7 @@ What we have:
 
 * A CA certificate called "ca-cert.pem"
 * A database is available at mysql://username:password@server/dbname (where +username+, +password+, +server+, and +dbname+ are the appropriate values for our server)
-* Other security, e.g. firewalls.  Please make sure to open the appropriate ports and grant the necessary access for your database to be available externally.
+* Other security, e.g. firewalls.  Please make sure to open the appropriate ports and grant the necessary access for your database to be available externally.  Further discussion is outside the scope of this document, but for accessing EC2, you might start at http://devcenter.heroku.com/articles/external-services.
 
 First, we configure Heroku with the appropriate environment variables:
 
@@ -83,7 +83,7 @@ With all these changes committed, we can deploy to our Heroku app:
 
 Now, since we are connecting to an existing database, we don't need to run any migrations.  (Keep in mind that when sharing a database, it is best to have one authoritative source for migrations to live.)  If in your situation you're creating a new database, you may need to do that, run migrations, seed the database, etc at this point.
 
-Open http://yourapp.heroku.com/ and we should see our data.  If you are not in your situation, please check the logs first:
+Open http://yourapp.heroku.com and we should see our data.  If you are not in your situation, please check the logs first:
 
   heroku logs --tail # Again, you may need to specify an app
 
