@@ -76,15 +76,15 @@ module HerokuExternalDb
     # Returns a partial ActiveRecord configuration hash for the given SSL CA certificate.
     # Checks to make sure the given filename actually exists, and raises an error if it
     # does not.
-    def db_ca_configuration(ca_filename)
-      return {} unless ca_filename
+    def db_configuration(opts)
+      return {} unless opts
     
-      raise "ca_path for #{ca_filename} cannot be determined from Rails root; please set it explicitly" unless ca_path
+      raise "ca_path for #{opts.inspect} cannot be determined from Rails root; please set it explicitly" unless ca_path
       
-      ca_filepath = File.join(ca_path, ca_filename)
-      raise "CA file #{ca_filepath} does not exist!" unless File.exists?(ca_filepath)
+      filepath = File.join(ca_path, opts[:sslca])
+      raise "File #{filepath.inspect} does not exist!" unless File.exists?(filepath)
     
-      return { :sslca => ca_filepath }
+      return { :sslca => filepath }
     end
   
     # Returns an ActiveRecord configuration hash based on the environment variables.
@@ -94,7 +94,7 @@ module HerokuExternalDb
         config = parse_db_uri(ENV["#{env_prefix}_DATABASE_URL"])
     
         if ENV["#{env_prefix}_DATABASE_CA"]
-          config.merge!(db_ca_configuration(ENV["#{env_prefix}_DATABASE_CA"]))
+          config.merge!(db_configuration(:sslca => ENV["#{env_prefix}_DATABASE_CA"]))
         end
       
         config

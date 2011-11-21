@@ -74,24 +74,24 @@ describe HerokuExternalDb::Configuration do
     end
   end
   
-  describe "#db_ca_configuration" do
+  describe "#db_configuration" do
     context "with a CA path" do
       before do
         @cert_path, @cert_filename = setup_ca_cert(@extdb)
       end
       
       it "should return an empty hash if not given a filename" do
-        @extdb.db_ca_configuration(nil).should == {}
+        @extdb.db_configuration(nil).should == {}
       end
     
       it "should have the correct pathname to the CA cert" do
-        @config = @extdb.db_ca_configuration(@cert_filename)
+        @config = @extdb.db_configuration(:sslca => @cert_filename)
         @config[:sslca].should == @cert_path
       end
     
       it "should throw an error if the file doesn't exist" do
         File.delete(@cert_path)
-        lambda { @extdb.db_ca_configuration(@cert_filename) }.should raise_error
+        lambda { @extdb.db_configuration(:sslca => @cert_filename) }.should raise_error
       end
     
       after do
@@ -101,11 +101,11 @@ describe HerokuExternalDb::Configuration do
     
     context "without a CA path" do
       it "should return an empty hash if not given a filename" do
-        @extdb.db_ca_configuration(nil).should == {}
+        @extdb.db_configuration(nil).should == {}
       end
       
       it "should raise an error if given a filename" do
-        lambda { @extdb.db_ca_configuration("filename") }.should raise_error
+        lambda { @extdb.db_configuration("filename") }.should raise_error
       end
     end
   end
