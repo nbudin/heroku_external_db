@@ -61,14 +61,28 @@ Keep in mind that Heroku installs its own +database.yml+ for Rails apps and we h
   -----> Removing shared-database:5mb from our-app... failed
    !     Shared databases cannot be removed
 
-This may still be useful to you if for example you want to have feature toggles in a local database, but the main data kept externally.
+PostgreSQL may still be useful to you if, for example, you want to have feature toggles in a local database, but the main data kept externally.  However in our case, it also means all developers will need MySQL and PostgreSQL running locally, which is unfortunate.
 
-  # See http://devcenter.heroku.com/articles/database
-  # TODO maybe heroku config:remove DATABASE_URL
+One workaround is only installing +pg+ in production:
 
-With your gems updated, we commit:
+  # File: Gemfile
+
+  # *Only* needed on production.
+  group :production do
+    gem 'pg', '~> 0.11.0' # Regardless of whether you plan to use the database or not, Heroku requires you have 'pg' installed.
+  end
+
+Then +bundle+ like so:
+
+  $ bundle install --without production
+
+With our gems updated, commit:
 
   git commit -av # Commit Gemfile and Gemfile.lock
+
+Another option may be overriding +database.yml+ somehow, although it would add complexity.  For more info, please see http://stackoverflow.com/questions/4204724/strategies-for-overriding-database-yml.
+
+With our dependencies out of the way, we can move on to testing the connection.
 
 If you are making a new application, you may wish to have a simple MVC for testing that the connection works.  E.g., for a blog style application with posts do:
 
@@ -84,7 +98,7 @@ With all these changes committed, we can deploy to our Heroku app:
 
 Now, since we are connecting to an existing database, we don't need to run any migrations.  (Keep in mind that when sharing a database, it is best to have one authoritative source for migrations to live.)  If in your situation you're creating a new database, you may need to do that, run migrations, seed the database, etc at this point.
 
-Open http://yourapp.heroku.com and we should see our data.  If you are not in your situation, please check the logs first:
+Open http://our-app.heroku.com and we should see our data.  If you are not in your situation, please check the logs first:
 
   heroku logs --tail # Again, you may need to specify an app
 
