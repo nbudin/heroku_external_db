@@ -6,18 +6,105 @@ Allows you to easily set up one or more external databases in Rails applications
 * You want to share a database between applications and aren't on the Heroku dedicated database plan.
 * You want to host your application database somewhere besides Heroku, and run the app using Heroku dynos.
 
-== Usage
+== Installation
 
 Add the following to your Gemfile:
 
   gem 'heroku_external_db'
+  # Or with the version number (easily found at https://rubygems.org/gems/heroku_external_db)
+  gem 'heroku_external_db', '~> x.y.z'
   
 Then run:
   
   bundle install
   rails generate heroku_external_db:generator
 
-This will set up a default initializer in your app's config/initializers/heroku_external_db.rb.  This makes the assumption that you're happy with using EXTERNAL_DATABASE_URL and (optionally) EXTERNAL_DATABASE_CA as your environment variables and that you want to use the external database as your main production DB.  If that's not true, please edit the initializer as needed.
+This will set up a default initializer in your app's +config/initializers/heroku_external_db.rb+.
+
+NOTE: If the generator does not work on your setup, you can copy the initializer by hand.
+
+== Tutorial
+
+The generator makes the assumption that you're happy with using +EXTERNAL_DATABASE_URL+ and (optionally) +EXTERNAL_DATABASE_CA+ as your environment variables and that you want to use the external database as your main production DB.  If that's not true, please edit the initializer as needed.
+
+=== Example: MySQL with a CA Certificate
+
+In this example, we are setting up a connection to an external MySQL server using the default initializer.
+
+What we have:
+
+* A CA certificate called +ca-cert.pem+
+* A database is available at mysql://username:password@server/dbname (where +username+, +password+, +server+, and +dbname+ are the appropriate values for our server)
+* Other security, e.g. firewalls.  Please make sure to open the appropriate ports and grant the necessary access for your database to be available externally.  Further discussion is outside the scope of this document, but for accessing EC2, you might start at http://devcenter.heroku.com/articles/external-services.
+
+First, we configure Heroku with the appropriate environment variables:
+
+  # You may have to specify the app name or remote name here via --app or --remote, respectively
+  heroku config:add EXTERNAL_DATABASE_CA='ca-cert.pem'
+  heroku config:add EXTERNAL_DATABASE_URL='mysql://username:password@server/dbname'
+
+By default, +heroku_external_db+ looks for the CA cert in +config/ca+, so we need to commit it:
+
+  mkdir -p config/ca
+  cp path/to/ca-cert.pem config/ca
+  git add config/ca
+  git commit -v # Using -v since we want to make sure the contents are what we expect (e.g. not a private key)
+
+Additionally, we need the +mysql+ gem in our Gemfile since we are setting up a MySQL server:
+
+  echo "gem 'mysql', '~> 2.8.1'" >> Gemfile
+  bundle install # Need Gemfile.lock too
+
+Keep in mind that Heroku installs its own +database.yml+ for Rails apps and we have to install +pg+ as well.  Unfortunately, shared databases are mandatory (but are free).
+
+  $ heroku addons:remove shared-database:5mb
+  -----> Removing shared-database:5mb from our-app... failed
+   !     Shared databases cannot be removed
+
+PostgreSQL may still be useful to you if, for example, you want to have feature toggles in a local database, but the main data kept externally.  However in our case, it also means all developers will need MySQL and PostgreSQL running locally, which is unfortunate.
+
+One workaround is only installing +pg+ in production:
+
+  # File: Gemfile
+
+  # *Only* needed on production.
+  group :production do
+    gem 'pg', '~> 0.11.0' # Regardless of whether you plan to use the database or not, Heroku requires you have 'pg' installed.
+  end
+
+Then +bundle+ like so:
+
+  $ bundle install --without production
+
+With our gems updated, commit:
+
+  git commit -av # Commit Gemfile and Gemfile.lock
+
+Another option may be overriding +database.yml+ somehow, although it would add complexity.  For more info, please see http://stackoverflow.com/questions/4204724/strategies-for-overriding-database-yml.
+
+With our dependencies out of the way, we can move on to testing the connection.
+
+If you are making a new application, you may wish to have a simple MVC for testing that the connection works.  E.g., for a blog style application with posts do:
+
+  rails generate scaffold post
+  # NOTE you probably want to change the default "Post.all" to "Post.limit(5)" or something similar
+  git add .
+  git commit # ...
+  # Don't forget to set a default route, etc.
+
+With all these changes committed, we can deploy to our Heroku app:
+
+  git push heroku master # Your remote may be different
+
+Now, since we are connecting to an existing database, we don't need to run any migrations.  (Keep in mind that when sharing a database, it is best to have one authoritative source for migrations to live.)  If in your situation you're creating a new database, you may need to do that, run migrations, seed the database, etc at this point.
+
+Open http://our-app.heroku.com and we should see our data.  If you happen to run into a problem, please check the logs first:
+
+  heroku logs --tail # Again, you may need to specify an app
+
+If you are having a problem, a good starting point is double checking your passwords, usernames, security settings, etc.
+
+Please note that X.509 is not currently supported and may be the reason for an "access denied" type of problem (if you require 2 certificates and 1 key, you're probably using X.509).  X.509 support is planned for an upcoming release.  (A proof of concept has already been completed.)
 
 == Contributing to heroku_external_db
  
@@ -31,6 +118,4 @@ This will set up a default initializer in your app's config/initializers/heroku_
 
 == Copyright
 
-Copyright (c) 2011 Nat Budin. See LICENSE.txt for
-further details.
-
+Copyright (c) 2011 Nat Budin. See LICENSE.txt for further details.
