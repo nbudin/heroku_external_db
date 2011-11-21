@@ -78,13 +78,21 @@ module HerokuExternalDb
     # does not.
     def db_configuration(opts)
       return {} unless opts
-    
       raise "ca_path for #{opts.inspect} cannot be determined from Rails root; please set it explicitly" unless ca_path
-      
-      filepath = File.join(ca_path, opts[:sslca])
-      raise "File #{filepath.inspect} does not exist!" unless File.exists?(filepath)
+
+      config = {}
+
+      [
+        :sslca,
+        # :sslcert,
+        # :sslkey,
+      ].each do |k|
+        filepath = File.join(ca_path, opts[k])
+        raise "File #{filepath.inspect} does not exist!" unless File.exists?(filepath)
+        config[k] = filepath
+      end
     
-      return { :sslca => filepath }
+      return config
     end
   
     # Returns an ActiveRecord configuration hash based on the environment variables.
@@ -94,7 +102,11 @@ module HerokuExternalDb
         config = parse_db_uri(ENV["#{env_prefix}_DATABASE_URL"])
     
         if ENV["#{env_prefix}_DATABASE_CA"]
-          config.merge!(db_configuration(:sslca => ENV["#{env_prefix}_DATABASE_CA"]))
+          config.merge!(db_configuration({
+            :sslca => ENV["#{env_prefix}_DATABASE_CA"]
+            # :sslcert => ENV["#{env_prefix}_DATABASE_CERT"]
+            # :sslkey => ENV["#{env_prefix}_DATABASE_KEY"]
+          }))
         end
       
         config
