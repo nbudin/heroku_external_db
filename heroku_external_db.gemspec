@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |gem|
-  gem.version       = "1.0.2"
+  gem.version       = "1.0.3"
 
-  gem.authors       = ["Nat Budin"]
-  gem.email         = ["natbudin@gmail.com"]
+  gem.authors       = ["Nat Budin", "Ben Oakes"]
+  gem.email         = ["natbudin@gmail.com", "hello@benjaminoakes.com"]
   gem.description   = %q{  heroku_external_db lets you specify multiple databases using Heroku-style DATABASE_URL parameters, wire
   them up to different ActiveRecord configurations, and automatically configure it from the Rails
   environment.  It also adds support for the :sslca configuration parameter so you can talk to external
