@@ -88,6 +88,31 @@ describe HerokuExternalDb::Configuration do
         @config = @extdb.db_configuration(:sslca => @cert_filename)
         @config[:sslca].should == @cert_path
       end
+
+      context 'when using X.509' do
+        it "should have the correct pathname to the client cert" do
+          @config = @extdb.db_configuration(:sslcert => @cert_filename)
+          @config[:sslcert].should == @cert_path
+        end
+
+        it "should have the correct pathname to the client key" do
+          @config = @extdb.db_configuration(:sslkey => @cert_filename)
+          @config[:sslkey].should == @cert_path
+        end
+
+        it 'should support setting all 3 X.509 certs' do
+          @config = @extdb.db_configuration({
+            :sslca => @cert_filename,
+            :sslcert => @cert_filename,
+            :sslkey => @cert_filename,
+          })
+
+          # TODO check for distinct values
+          @config[:sslca].should == @cert_path
+          @config[:sslcert].should == @cert_path
+          @config[:sslkey].should == @cert_path
+        end
+      end
     
       it "should throw an error if the file doesn't exist" do
         File.delete(@cert_path)

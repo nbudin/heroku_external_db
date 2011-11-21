@@ -84,12 +84,16 @@ module HerokuExternalDb
 
       [
         :sslca,
-        # :sslcert,
-        # :sslkey,
+
+        # Needed when using X.509
+        :sslcert,
+        :sslkey,
       ].each do |k|
-        filepath = File.join(ca_path, opts[k])
-        raise "File #{filepath.inspect} does not exist!" unless File.exists?(filepath)
-        config[k] = filepath
+        if value = opts[k]
+          filepath = File.join(ca_path, value)
+          raise "File #{filepath.inspect} does not exist!" unless File.exists?(filepath)
+          config[k] = filepath
+        end
       end
     
       return config
@@ -103,9 +107,9 @@ module HerokuExternalDb
     
         if ENV["#{env_prefix}_DATABASE_CA"]
           config.merge!(db_configuration({
-            :sslca => ENV["#{env_prefix}_DATABASE_CA"]
-            # :sslcert => ENV["#{env_prefix}_DATABASE_CERT"]
-            # :sslkey => ENV["#{env_prefix}_DATABASE_KEY"]
+            :sslca => ENV["#{env_prefix}_DATABASE_CA"],
+            :sslcert => ENV["#{env_prefix}_DATABASE_CERT"],
+            :sslkey => ENV["#{env_prefix}_DATABASE_KEY"],
           }))
         end
       
