@@ -61,6 +61,8 @@ Keep in mind that Heroku installs its own +database.yml+ for Rails apps and we h
   -----> Removing shared-database:5mb from our-app... failed
    !     Shared databases cannot be removed
 
+*NOTE:* This seems to be changing in Cedar.  See http://devcenter.heroku.com/articles/cedar#adding_a_database
+
 PostgreSQL may still be useful to you if, for example, you want to have feature toggles in a local database, but the main data kept externally.  However in our case, it also means all developers will need MySQL and PostgreSQL running locally, which is unfortunate.
 
 One workaround is only installing +pg+ in production:
