@@ -1,4 +1,11 @@
-= heroku_external_db
+= PLEASE DON'T USE THIS GEM ANYMORE
+
+Heroku officially supports using externally-hosted databases, so this gem is no longer necessary.  For example, here's their documentation on how to use Amazon RDS databases: https://devcenter.heroku.com/articles/amazon-rds
+
+= THANKS PLEASE STOP USING THIS
+
+
+== heroku_external_db
 
 Allows you to easily set up one or more external databases in Rails applications from Heroku, including the ability to do MySQL connections over SSL.  This is useful in the following situations, for example:
 
